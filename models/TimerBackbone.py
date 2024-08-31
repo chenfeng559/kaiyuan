@@ -1,14 +1,25 @@
+<<<<<<< HEAD
 import torch
 from torch import nn
 
+=======
+import mindspore as ms
+from mindspore import nn
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
 from layers.Embed import PatchEmbedding
 from layers.SelfAttention_Family import AttentionLayer, FullAttention
 from layers.Transformer_EncDec import Encoder, EncoderLayer
 
 
+<<<<<<< HEAD
 class Model(nn.Module):
     def __init__(self, configs):
         super().__init__()
+=======
+class Model(nn.Cell):
+    def __init__(self, configs):
+        super(Model, self).__init__()
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
         self.task_name = configs.task_name
         self.patch_len = configs.patch_len
         self.stride = configs.patch_len
@@ -34,6 +45,7 @@ class Model(nn.Module):
                     configs.d_ff,
                     dropout=configs.dropout,
                     activation=configs.activation
+<<<<<<< HEAD
                 ) for l in range(configs.e_layers)
             ],
             norm_layer=torch.nn.LayerNorm(configs.d_model)
@@ -41,3 +53,24 @@ class Model(nn.Module):
 
         # Prediction Head
         self.proj = nn.Linear(self.d_model, configs.patch_len, bias=True)
+=======
+                ) for _ in range(configs.e_layers)
+            ],
+            norm_layer=nn.LayerNorm(configs.d_model)
+        )
+
+        # Prediction Head
+        self.proj = nn.Dense(self.d_model, configs.patch_len, has_bias=True)
+
+    def construct(self, x):
+        # Patching and embedding
+        x = self.patch_embedding(x)
+
+        # Decoder forward pass
+        x = self.decoder(x)
+
+        # Prediction
+        output = self.proj(x)
+
+        return output
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c

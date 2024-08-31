@@ -1,7 +1,12 @@
 import os
+<<<<<<< HEAD
 
 from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
+=======
+import mindspore.dataset as ds
+from mindspore import log as logger
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
 
 from data_provider.data_loader import Dataset_ETT_hour, Dataset_ETT_minute, \
     Dataset_Custom, Dataset_PEMS, UCRAnomalyloader
@@ -33,9 +38,15 @@ def data_provider(args, flag):
         batch_size = args.batch_size  # bsz for train and valid
         freq = args.freq
 
+<<<<<<< HEAD
     if args.task_name == 'forecast' or args.task_name  == 'predict':
         if args.use_ims:
             print('*******************CIAutoRegressionDatasetBenchmark')
+=======
+    if args.task_name in ['forecast', 'predict']:
+        if args.use_ims:
+            logger.info('*******************CIAutoRegressionDatasetBenchmark')
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
             data_set = CIAutoRegressionDatasetBenchmark(
                 root_path=os.path.join(args.root_path, args.data_path),
                 flag=flag,
@@ -50,7 +61,11 @@ def data_provider(args, flag):
                 subset_rand_ratio=args.subset_rand_ratio,
             )
         else:
+<<<<<<< HEAD
             print('*******************CIDatasetBenchmark')
+=======
+            logger.info('*******************CIDatasetBenchmark')
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
             data_set = CIDatasetBenchmark(
                 root_path=os.path.join(args.root_path, args.data_path),
                 flag=flag,
@@ -63,6 +78,7 @@ def data_provider(args, flag):
                 stride=args.stride,
                 subset_rand_ratio=args.subset_rand_ratio,
             )
+<<<<<<< HEAD
         print(flag, len(data_set))
         if args.use_multi_gpu:
             train_datasampler = DistributedSampler(data_set, shuffle=shuffle_flag)
@@ -82,6 +98,16 @@ def data_provider(args, flag):
                 num_workers=args.num_workers,
                 drop_last=False)
         return data_set, data_loader
+=======
+
+        logger.info(f"{flag} {len(data_set)}")
+
+        # 使用 MindSpore 的数据集
+        dataset = ds.GeneratorDataset(data_set, column_names=["data", "label"], shuffle=shuffle_flag)
+        dataset = dataset.batch(batch_size, drop_remainder=drop_last)
+
+        return data_set, dataset
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
 
     elif args.task_name == 'anomaly_detection':
         drop_last = False
@@ -92,6 +118,7 @@ def data_provider(args, flag):
             patch_len=args.patch_len,
             flag=flag,
         )
+<<<<<<< HEAD
         print(flag, len(data_set))
         data_loader = DataLoader(
             data_set,
@@ -100,6 +127,13 @@ def data_provider(args, flag):
             num_workers=args.num_workers,
             drop_last=drop_last)
         return data_set, data_loader
+=======
+        logger.info(f"{flag} {len(data_set)}")
+        dataset = ds.GeneratorDataset(data_set, column_names=["data", "label"], shuffle=shuffle_flag)
+        dataset = dataset.batch(batch_size, drop_remainder=drop_last)
+        return data_set, dataset
+
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
     elif args.task_name == 'imputation':
         Data = data_dict[args.data]
         data_set = Data(
@@ -112,6 +146,7 @@ def data_provider(args, flag):
             timeenc=timeenc,
             freq=freq,
         )
+<<<<<<< HEAD
         print(flag, len(data_set))
         data_loader = DataLoader(
             data_set,
@@ -120,5 +155,12 @@ def data_provider(args, flag):
             num_workers=args.num_workers,
             drop_last=drop_last)
         return data_set, data_loader
+=======
+        logger.info(f"{flag} {len(data_set)}")
+        dataset = ds.GeneratorDataset(data_set, column_names=["data", "label"], shuffle=shuffle_flag)
+        dataset = dataset.batch(batch_size, drop_remainder=drop_last)
+        return data_set, dataset
+
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
     else:
         raise NotImplementedError

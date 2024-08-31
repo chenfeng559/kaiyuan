@@ -1,17 +1,28 @@
 import os
 import sys
+<<<<<<< HEAD
 
 import math
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.distributed as dist
+=======
+import math
+import matplotlib.pyplot as plt
+import mindspore.numpy as np
+from mindspore import Tensor
+import mindspore.distributed as dist
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
 
 plt.switch_backend('agg')
 
 
 def adjust_learning_rate(optimizer, epoch, args):
+<<<<<<< HEAD
     # lr = args.learning_rate * (0.2 ** (epoch // 2))
+=======
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
     if args.lradj == 'type1':
         lr_adjust = {epoch: args.learning_rate * (0.5 ** ((epoch - 1) // 1))}
     elif args.lradj == 'type2':
@@ -20,7 +31,12 @@ def adjust_learning_rate(optimizer, epoch, args):
             10: 5e-7, 15: 1e-7, 20: 5e-8
         }
     elif args.lradj == "cosine":
+<<<<<<< HEAD
         lr_adjust = {epoch: args.learning_rate /2 * (1 + math.cos(epoch / args.train_epochs * math.pi))}
+=======
+        lr_adjust = {epoch: args.learning_rate / 2 * (1 + math.cos(epoch / args.train_epochs * math.pi))}
+
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
     if epoch in lr_adjust.keys():
         lr = lr_adjust[epoch]
         for param_group in optimizer.param_groups:
@@ -53,7 +69,12 @@ class LargeScheduler:
             self.learning_rate = 1e-4
             lr_adjust = {epoch: self.learning_rate if epoch < 3 else self.learning_rate * (0.9 ** ((epoch - 3) // 1))}
         elif self.lradj == 'cos_epoch':
+<<<<<<< HEAD
             lr_adjust = {epoch: self.learning_rate / 2 * (1 + math.cos(epoch / self.args.cos_max_decay_epoch * math.pi))}
+=======
+            lr_adjust = {
+                epoch: self.learning_rate / 2 * (1 + math.cos(epoch / self.args.cos_max_decay_epoch * math.pi))}
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
         else:
             return
 
@@ -110,7 +131,11 @@ class EarlyStopping:
     def save_checkpoint(self, val_loss, model, path):
         if self.verbose:
             print(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).  Saving model ...')
+<<<<<<< HEAD
         torch.save(model.state_dict(), path + '/' + 'checkpoint.pth')
+=======
+        model.save_checkpoint(path + '/' + 'checkpoint.ckpt')  # MindSpore model saving
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
         self.val_loss_min = val_loss
 
 
@@ -139,7 +164,10 @@ class EarlyStoppingLarge:
                 if (self.use_multi_gpu and self.local_rank == 0) or not self.use_multi_gpu:
                     print(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).')
             self.val_loss_min = val_loss
+<<<<<<< HEAD
             # self.save_checkpoint(val_loss, model, path)
+=======
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
         elif score < self.best_score + self.delta:
             self.counter += 1
             if (self.use_multi_gpu and self.local_rank == 0) or not self.use_multi_gpu:
@@ -149,12 +177,19 @@ class EarlyStoppingLarge:
         else:
             self.best_score = score
             self.best_epoch = epoch
+<<<<<<< HEAD
             # self.save_checkpoint(val_loss, model, path)
+=======
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
             if self.verbose:
                 if (self.use_multi_gpu and self.local_rank == 0) or not self.use_multi_gpu:
                     print(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).')
             self.val_loss_min = val_loss
             self.counter = 0
+<<<<<<< HEAD
+=======
+
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
         if self.use_multi_gpu:
             if self.local_rank == 0:
                 self.save_checkpoint(val_loss, model, path, epoch)
@@ -164,7 +199,11 @@ class EarlyStoppingLarge:
         return self.best_epoch
 
     def save_checkpoint(self, val_loss, model, path, epoch):
+<<<<<<< HEAD
         torch.save(model.state_dict(), path + '/' + f'checkpoint_{epoch}.pth')
+=======
+        model.save_checkpoint(path + '/' + f'checkpoint_{epoch}.ckpt')  # MindSpore model saving
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
 
 
 class dotdict(dict):
@@ -241,6 +280,10 @@ class HiddenPrints:
         if rank is None:
             rank = 0
         self.rank = rank
+<<<<<<< HEAD
+=======
+
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
     def __enter__(self):
         if self.rank == 0:
             return
@@ -251,4 +294,8 @@ class HiddenPrints:
         if self.rank == 0:
             return
         sys.stdout.close()
+<<<<<<< HEAD
         sys.stdout = self._original_stdout
+=======
+        sys.stdout = self._original_stdout
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c

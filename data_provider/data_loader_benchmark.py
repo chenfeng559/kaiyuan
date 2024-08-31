@@ -1,16 +1,30 @@
 import warnings
+<<<<<<< HEAD
 
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from torch.utils.data import Dataset
+=======
+import numpy as np
+import pandas as pd
+from mindspore.dataset import Dataset, GeneratorDataset
+from mindspore.dataset.transforms import Compose, Map
+from mindspore.dataset.vision import ToTensor
+from mindspore import Tensor
+from sklearn.preprocessing import StandardScaler
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
 
 from utils.timefeatures import time_features
 
 warnings.filterwarnings('ignore')
 
 
+<<<<<<< HEAD
 class CIDatasetBenchmark(Dataset):
+=======
+class CIDatasetBenchmark:
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
     def __init__(self, root_path='dataset', flag='train', input_len=None, pred_len=None,
                  data_type='custom', scale=True, timeenc=1, freq='h', stride=1, subset_rand_ratio=1.0):
         self.subset_rand_ratio = subset_rand_ratio
@@ -19,11 +33,18 @@ class CIDatasetBenchmark(Dataset):
         self.seq_len = input_len + pred_len
         self.timeenc = timeenc
         self.scale = scale
+<<<<<<< HEAD
         print('flag is ****************',flag)
+=======
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
         assert flag in ['train', 'test', 'val']
         type_map = {'train': 0, 'val': 1, 'test': 2}
         self.set_type = type_map[flag]
         self.data_type = data_type
+<<<<<<< HEAD
+=======
+
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
         if self.set_type == 0:
             self.internal = int(1 // self.subset_rand_ratio)
         else:
@@ -37,6 +58,11 @@ class CIDatasetBenchmark(Dataset):
     def __read_data__(self):
         self.scaler = StandardScaler()
         dataset_file_path = self.root_path
+<<<<<<< HEAD
+=======
+
+        # Load data
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
         if dataset_file_path.endswith('.csv'):
             df_raw = pd.read_csv(dataset_file_path)
         elif dataset_file_path.endswith('.txt'):
@@ -56,12 +82,19 @@ class CIDatasetBenchmark(Dataset):
         else:
             raise ValueError('Unknown data format: {}'.format(dataset_file_path))
 
+<<<<<<< HEAD
         if self.data_type == 'custom':
             data_len = len(df_raw)
+=======
+        # Data splitting logic
+        data_len = len(df_raw)
+        if self.data_type == 'custom':
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
             num_train = int(data_len * 0.7)
             num_test = int(data_len * 0.2)
             num_vali = data_len - num_train - num_test
             border1s = [0, num_train - self.input_len, data_len - num_test - self.input_len]
+<<<<<<< HEAD
             print(border1s)
             border2s = [num_train, num_train + num_vali, data_len]
             print(border2s)
@@ -92,20 +125,36 @@ class CIDatasetBenchmark(Dataset):
             num_vali = data_len - num_train - num_test
             border1s = [0, num_train - self.input_len, data_len - num_test - self.input_len]
             border2s = [num_train, num_train + num_vali, data_len]
+=======
+            border2s = [num_train, num_train + num_vali, data_len]
+        else:
+            # Add handling for other dataset types if needed
+            raise ValueError('Unsupported data type: {}'.format(self.data_type))
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
 
         border1 = border1s[self.set_type]
         border2 = border2s[self.set_type]
 
+<<<<<<< HEAD
         if isinstance(df_raw[df_raw.columns[0]][2], str):
             data = df_raw[df_raw.columns[1:]].values
         else:
             data = df_raw.values
         # 归一化之前再次打印特征数
+=======
+        data = df_raw.values
+
+        # Scale data
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
         if self.scale:
             train_data = data[border1s[0]:border2s[0]]
             self.scaler.fit(train_data)
             data = self.scaler.transform(data)
 
+<<<<<<< HEAD
+=======
+        # Prepare timestamps
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
         if self.timeenc == 0:
             df_stamp = df_raw[['date']]
             df_stamp['date'] = pd.to_datetime(df_stamp.date)
@@ -115,6 +164,7 @@ class CIDatasetBenchmark(Dataset):
             df_stamp['hour'] = df_stamp.date.apply(lambda row: row.hour, 1)
             df_stamp['minute'] = df_stamp.date.apply(lambda row: row.minute, 1)
             df_stamp['minute'] = df_stamp.minute.map(lambda x: x // 15)
+<<<<<<< HEAD
             data_stamp = df_stamp.drop(['date'], 1).values
         elif self.timeenc == 1:
             if isinstance(df_raw[df_raw.columns[0]][2], str):
@@ -122,6 +172,12 @@ class CIDatasetBenchmark(Dataset):
                 data_stamp = data_stamp.transpose(1, 0)
             else:
                 data_stamp = np.zeros((len(df_raw), 4))
+=======
+            data_stamp = df_stamp.drop(['date'], axis=1).values
+        elif self.timeenc == 1:
+            data_stamp = time_features(pd.to_datetime(df_raw.date.values), freq='h')
+            data_stamp = data_stamp.transpose(1, 0)
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
         else:
             raise ValueError('Unknown timeenc: {}'.format(self.timeenc))
 
@@ -132,6 +188,18 @@ class CIDatasetBenchmark(Dataset):
         self.n_var = self.data_x.shape[-1]
         self.n_timepoint = len(self.data_x) - self.input_len - self.pred_len + 1
 
+<<<<<<< HEAD
+=======
+    def get_dataset(self):
+        data_generator = self.__data_generator__()
+        return GeneratorDataset(data_generator, ["seq_x", "seq_y", "seq_x_mark", "seq_y_mark"],
+                                shuffle=True)
+
+    def __data_generator__(self):
+        for index in range(self.__len__()):
+            yield self.__getitem__(index)
+
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
     def __getitem__(self, index):
         if self.set_type == 0:
             index = index * self.internal
@@ -144,9 +212,14 @@ class CIDatasetBenchmark(Dataset):
         seq_y = self.data_y[r_begin:r_end, c_begin:c_begin + 1]
         seq_x_mark = self.data_stamp[s_begin:s_end]
         seq_y_mark = self.data_stamp[r_begin:r_end]
+<<<<<<< HEAD
         # 打印数据形状
         print(f"seq_x **************** shape: {seq_x.shape}")
         return seq_x, seq_y, seq_x_mark, seq_y_mark
+=======
+        return Tensor(seq_x, dtype=mindspore.float32), Tensor(seq_y, dtype=mindspore.float32), \
+               Tensor(seq_x_mark, dtype=mindspore.float32), Tensor(seq_y_mark, dtype=mindspore.float32)
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
 
     def __len__(self):
         if self.data_type == 'wind':
@@ -180,9 +253,14 @@ class CIAutoRegressionDatasetBenchmark(CIDatasetBenchmark):
         seq_y = self.data_y[r_begin:r_end, c_begin:c_begin + 1]
         seq_x_mark = self.data_stamp[s_begin:s_end]
         seq_y_mark = self.data_stamp[r_begin:r_end]
+<<<<<<< HEAD
         # 打印数据形状
         # print(f"seq_x shape: {seq_x.shape}")
         # print(f"seq_y shape: {seq_y.shape}")
         # print(f"seq_x_mark shape: {seq_x_mark.shape}")
         # print(f"seq_y_mark shape: {seq_y_mark.shape}")
         return seq_x, seq_y, seq_x_mark, seq_y_mark
+=======
+        return Tensor(seq_x, dtype=mindspore.float32), Tensor(seq_y, dtype=mindspore.float32), \
+               Tensor(seq_x_mark, dtype=mindspore.float32), Tensor(seq_y_mark, dtype=mindspore.float32)
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c

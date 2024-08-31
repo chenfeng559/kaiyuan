@@ -1,7 +1,12 @@
+<<<<<<< HEAD
 
 from typing import List
 
 import numpy as np
+=======
+from typing import List
+import mindspore.numpy as np
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
 import pandas as pd
 from pandas.tseries import offsets
 from pandas.tseries.frequencies import to_offset
@@ -19,7 +24,11 @@ class TimeFeature:
 
 
 class SecondOfMinute(TimeFeature):
+<<<<<<< HEAD
     """Minute of hour encoded as value between [-0.5, 0.5]"""
+=======
+    """Second of minute encoded as value between [-0.5, 0.5]"""
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
 
     def __call__(self, index: pd.DatetimeIndex) -> np.ndarray:
         return index.second / 59.0 - 0.5
@@ -40,7 +49,11 @@ class HourOfDay(TimeFeature):
 
 
 class DayOfWeek(TimeFeature):
+<<<<<<< HEAD
     """Hour of day encoded as value between [-0.5, 0.5]"""
+=======
+    """Day of week encoded as value between [-0.5, 0.5]"""
+>>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
 
     def __call__(self, index: pd.DatetimeIndex) -> np.ndarray:
         return index.dayofweek / 6.0 - 0.5
