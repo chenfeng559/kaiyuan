@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-import torch
-from torch import nn
-
-=======
 import mindspore as ms
 from mindspore import nn
->>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
 from layers.Embed import PatchEmbedding
 from layers.SelfAttention_Family import AttentionLayer, FullAttention
 from layers.Transformer_EncDec import Encoder, EncoderLayer

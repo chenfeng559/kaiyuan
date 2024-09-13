@@ -1,14 +1,4 @@
 import numpy as np
-<<<<<<< HEAD
-import torch
-import torch.nn as nn
-from math import sqrt
-
-from utils.masking import TriangularCausalMask
-
-
-class FullAttention(nn.Module):
-=======
 import mindspore as ms
 from mindspore import nn, Tensor
 from mindspore.ops import operations as P
@@ -16,7 +6,6 @@ from math import sqrt
 from utils.masking import TriangularCausalMask
 
 class FullAttention(nn.Cell):
->>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
     def __init__(self, mask_flag=True, factor=5, scale=None, attention_dropout=0.1, output_attention=False):
         super(FullAttention, self).__init__()
         self.scale = scale

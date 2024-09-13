@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-import torch.nn as nn
-import torch.nn.functional as F
-
-
-class ConvLayer(nn.Module):
-    def __init__(self, c_in):
-        super(ConvLayer, self).__init__()
-        self.downConv = nn.Conv1d(in_channels=c_in,
-                                  out_channels=c_in,
-                                  kernel_size=3,
-                                  padding=2,
-                                  padding_mode='circular')
-=======
 import mindspore as ms
 from mindspore import nn
 from mindspore import Tensor
@@ -27,7 +13,6 @@ class ConvLayer(nn.Cell):
                                    kernel_size=3,
                                    pad_mode='pad',  # Using pad_mode to specify padding mode
                                    padding=2)
->>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
         self.norm = nn.BatchNorm1d(c_in)
         self.activation = nn.ELU()
         self.maxPool = nn.MaxPool1d(kernel_size=3, stride=2, padding=1)

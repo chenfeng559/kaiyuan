@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-import torch
-from torch import nn
-import os
-from models import TimerBackbone
-from pathlib import Path
-class Model(nn.Module):
-    def __init__(self, configs):
-        super().__init__()
-=======
 import mindspore as ms
 from mindspore import nn
 from models import TimerBackbone
@@ -17,7 +7,6 @@ import numpy as np
 class Model(nn.Cell):
     def __init__(self, configs):
         super(Model, self).__init__()
->>>>>>> 15d50d09666c0f1820500907f6e1a55b4753574c
         self.task_name = configs.task_name
         self.ckpt_path = configs.ckpt_path
         self.patch_len = configs.patch_len
