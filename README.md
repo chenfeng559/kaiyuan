@@ -12,22 +12,6 @@
   <source src="./figures/video.mp4" type="video/mp4">
 </video>
 
-### 管理员界面
-
-使用 React 进行搭建，展示数据可视化功能页面。
-
-<p align="center">
-<img src="./figures/admin.png" align=center />
-</p>
-
-### 检测检测情况
-
-检测不同的时间段模型预测情况。
-
-<p align="center">
-<img src="./figures/DiffTime.png" align=center />
-</p>
-
 ## 系统框架
 
 ### 系统整体结构
@@ -67,6 +51,22 @@
 
 <p align="center">
 <img src="./figures/utsd.png" align=center />
+</p>
+
+### 管理员界面
+
+使用 React 进行搭建，展示数据可视化功能页面。
+
+<p align="center">
+<img src="./figures/admin.png" align=center />
+</p>
+
+### 检测检测情况
+
+检测不同的时间段模型预测情况。
+
+<p align="center">
+<img src="./figures/DiffTime.png" align=center />
 </p>
 
 ## 安装与启动
