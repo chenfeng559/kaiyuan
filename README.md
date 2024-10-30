@@ -10,12 +10,11 @@
 
 <video width="400" height="300" controls>
   <source src="./figures/video.mp4" type="video/mp4">
-  你的浏览器不支持视频标签。
 </video>
 
 ### 管理员界面
 
-展示前端功能页面。
+使用 React 进行搭建，展示数据可视化功能页面。
 
 <p align="center">
 <img src="./figures/admin.png" align=center />
@@ -31,13 +30,30 @@
 
 ## 系统框架
 
+### 系统整体结构
+
+<p align="center">
+<img src="./figures/frame.png" alt="300" align=center />
+</p>
+
 ### 主要组件功能
 
 \*搜索规划：利用 LLM 的 query 分类，多轮改写，复杂查询分解，实现精准搜索。
 
 \*时序预测：使用 Transformer 架构进行时序信号预测，实现工业领域长短期精准预测
 
+<p align="center">
+<img src="./figures/squ_model.png" alt="300" align=center />
+</p>
+
 \*企业知识库：使用搜索增强生成 RAG 解决私域知识融合、大模型落地中的幻觉、时效性
+
+<p align="center">
+<img src="./figures/rag.png" alt="300" align=center />
+</p>
+<p align="center">
+<img src="./figures/rag_1.png" alt="300" align=center />
+</p>
 
 \*专业题库：利用 LLM 智能推理能力与概括归纳能力，实现出题批改，有效提高员工专业知识水平
 
