@@ -42,7 +42,7 @@
 \*专业题库：利用 LLM 智能推理能力与概括归纳能力，实现出题批改，有效提高员工专业知识水平
 
 <p align="center">
-<img src="./figures/frame.png" alt="300" align=center />
+<img src="./figures/tiku.png" alt="300" align=center />
 </p>
 
 ## 数据集
